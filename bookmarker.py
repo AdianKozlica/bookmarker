@@ -44,10 +44,18 @@ def parse(file: str):
 def get_args():
     parser = argparse.ArgumentParser(
         prog="CLI Bookmarker",
-        description="Read and store bookmarks in a simple .txt file",
+        description="A command-line tool to read and store bookmarks from a simple .txt file. "
+        "Each line in the file should contain a path and a URL separated by '->'.",
     )
 
-    parser.add_argument("-f", "--filename", required=True, help="Filename")
+    parser.add_argument(
+        "-f",
+        "--filename",
+        required=True,
+        help="The path to the .txt file containing the bookmarks. Each line in the file should "
+        "be formatted as 'path -> URL'.",
+    )
+
     return parser.parse_args()
 
 
