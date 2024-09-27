@@ -1,0 +1,2 @@
+"/Entartainment/YouTube" -> "https://youtube.com"
+"/Google" -> "https://google.ba"
