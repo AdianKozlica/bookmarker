@@ -148,9 +148,11 @@ def main():
     ]
 
     history = History([paths["/"]])
+
+    footer_text = urwid.Text("SPACE - Select item     ESC - Go back")
     list_walker = urwid.SimpleListWalker([])
     list_box = urwid.ListBox(list_walker)
-    frame = urwid.Frame(list_box)
+    frame = urwid.Frame(list_box, footer=footer_text)
     loop = urwid.MainLoop(
         frame,
         palette=palette,
