@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
+import os
 import urwid
 import shlex
 import argparse
+import platform
 import subprocess
 
 
@@ -13,10 +15,13 @@ def shlex_split(string: str, delimeter="->"):
     return list(lex)
 
 
-def xdg_open(url: str):
-    subprocess.Popen(
-        ["xdg-open", url], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-    )
+def open_with_default_app(url: str):
+    if platform.system() == "windows":
+        os.startfile(url)
+    else:
+        subprocess.Popen(
+            ["open", url], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+        )
 
 
 def parse(file: str):
@@ -103,7 +108,9 @@ def generate_buttons(
                 f"📁 {key}", get_contents, (history, path[key], list_walker, loop)
             )
         else:
-            btn = urwid.Button(f"🌐 {key}", lambda _, url=path[key]: xdg_open(url))
+            btn = urwid.Button(
+                f"🌐 {key}", lambda _, url=path[key]: open_with_default_app(url)
+            )
 
         styled_btn = urwid.AttrMap(btn, "normal", focus_map="reversed")
         buttons.append(styled_btn)
@@ -141,9 +148,11 @@ def main():
     ]
 
     history = History([paths["/"]])
+
+    footer_text = urwid.Text("SPACE - Select item     ESC - Go back")
     list_walker = urwid.SimpleListWalker([])
     list_box = urwid.ListBox(list_walker)
-    frame = urwid.Frame(list_box)
+    frame = urwid.Frame(list_box, footer=footer_text)
     loop = urwid.MainLoop(
         frame,
         palette=palette,
